@@ -11,10 +11,21 @@ class RenderSliverCrossAxisConstrained extends RenderSliver
   /// Max allowed limit of the cross axis
   double get maxCrossAxisExtent => _maxCrossAxisExtent!;
   double? _maxCrossAxisExtent;
+  double get autoMargin => _autoMargin!;
+  double? _autoMargin;
+
   set maxCrossAxisExtent(double value) {
     assert(value > 0);
     if (_maxCrossAxisExtent != value) {
       _maxCrossAxisExtent = value;
+      markNeedsLayout();
+    }
+  }
+
+  set autoMargin(double value) {
+    assert(value >= 0);
+    if (_autoMargin != value) {
+      _autoMargin = value;
       markNeedsLayout();
     }
   }
@@ -36,10 +47,22 @@ class RenderSliverCrossAxisConstrained extends RenderSliver
   SliverCrossAxisPositionedData createCrossAxisPositionData(
     SliverConstraints constraints,
   ) {
-    final crossAxisExtent = min(
+    double margin = _autoMargin ?? 0;
+    double crossAxisExtent = min(
       constraints.crossAxisExtent,
       maxCrossAxisExtent,
     );
+    if (margin > 0) {
+      final threshold = (maxCrossAxisExtent + (margin * 2));
+      if (crossAxisExtent < threshold) {
+        margin = (crossAxisExtent > maxCrossAxisExtent
+            ? margin - ((crossAxisExtent - maxCrossAxisExtent) / 2)
+            : margin);
+      }
+      crossAxisExtent = (crossAxisExtent < threshold)
+          ? maxCrossAxisExtent - (margin * 2)
+          : maxCrossAxisExtent;
+    }
     return SliverCrossAxisPositionedData(
       crossAxisExtent: crossAxisExtent,
       crossAxisPosition: (alignment + 1) *

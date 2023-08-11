@@ -12,6 +12,7 @@ class SliverCrossAxisConstrained extends SingleChildRenderObjectWidget {
     required this.maxCrossAxisExtent,
     required Widget child,
     this.alignment = 0,
+    this.autoMargin = 0,
   }) : super(key: key, child: child);
 
   /// Max allowed limit of the cross axis
@@ -20,6 +21,11 @@ class SliverCrossAxisConstrained extends SingleChildRenderObjectWidget {
   /// How to align the sliver in the cross axis
   /// 0 means center -1 means to the left +1 means to the right
   final double alignment;
+
+  /// Allow for a margin to be added when less than the maxCrossAxisExtent
+  /// This is useful when you want to center the sliver but also want to
+  /// add a margin to the left and right of the sliver when minimized
+  final double autoMargin;
 
   @override
   RenderSliverCrossAxisConstrained createRenderObject(BuildContext context) {
@@ -33,7 +39,8 @@ class SliverCrossAxisConstrained extends SingleChildRenderObjectWidget {
       BuildContext context, RenderSliverCrossAxisConstrained renderObject) {
     renderObject
       ..maxCrossAxisExtent = maxCrossAxisExtent
-      ..alignment = alignment;
+      ..alignment = alignment
+      ..autoMargin = autoMargin;
   }
 
   @override
