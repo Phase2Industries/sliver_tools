@@ -60,8 +60,8 @@ class RenderSliverCrossAxisConstrained extends RenderSliver
             : margin);
       }
       crossAxisExtent = (crossAxisExtent < threshold)
-          ? maxCrossAxisExtent - (margin * 2)
-          : maxCrossAxisExtent;
+          ? crossAxisExtent - (margin * 2)
+          : crossAxisExtent;
     }
     return SliverCrossAxisPositionedData(
       crossAxisExtent: crossAxisExtent,
